@@ -349,6 +349,11 @@ window.onload = function(){
                 for(var i=0;i<guardAmount+1;i++){   
                     if(this.intersect(guards[i])){
                         game.se3.play();
+                        /*stage.removeChild(game.score);
+                        game.score--;
+                        stage.addChild(game.score);
+                        */
+
                         //stage.removeChild(guards[i]);
                         //player1.x = 16;
                         //player1.y = 16;
@@ -604,7 +609,7 @@ window.onload = function(){
                         stage.addChild(bombs[i]); 
                         if(bombs[i].age < 20){
                             bombs[i].remove();
-                            game.bomb.play();
+                            game.shot.play();
                         }
                     }
                 });
