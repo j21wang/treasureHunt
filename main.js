@@ -15,16 +15,56 @@ window.onload = function(){
     game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png');
 
     game.onload = function(){
+        var map = new Map(16,16);
+        map.image = game.assets['images/map0.png'];
+        
         var bg = new Sprite(320,320);
-        var maptip = game.assets['images/map0.png'];
-        var image = new Surface(320,320);
-        for(var j=0; j<320; j+=16){
-            for(var i=0; i<320; i+=16){
-                image.draw(maptip,0,0,16,16,i,j,16,16);
-            }
-        }
-        bg.image = image;
-        game.rootScene.addChild(bg);
+        var bg = new Sprite(320,320);
+        map.loadData([
+              [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
+              [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+              ]);
+
+        map.collisionData = [
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+              ];
 
         var Player1 = enchant.Class.create(enchant.Sprite,{
             initialize: function(){
@@ -39,7 +79,7 @@ window.onload = function(){
                 this.movement();                
             },
             remove: function(){
-                game.rootScene.removeChild(this);
+                stage.removeChild(this);
             },
             movement: function(){
                 this.x = 100;
@@ -59,15 +99,15 @@ window.onload = function(){
                             this.y -= 4;
                         } else if(game.input.down){
                             this.dir = DIR_DOWN;
-                            if(this.y < 320 - this.height)
+                            if(this.y < 320 - this.height-16)
                             this.y += 4;
                         } else if(game.input.left){
                             this.dir = DIR_LEFT;
-                            if(this.x > 0)
+                            if(this.x > 0+this.height-25)
                             this.x -= 4;
                         } else if(game.input.right){
                             this.dir = DIR_RIGHT;
-                            if(this.x < 320 - this.width)
+                            if(this.x < 320 - this.width-5)
                             this.x += 4;
                         }
 
@@ -80,11 +120,12 @@ window.onload = function(){
             },
             checkChest: function(){
                 for(var i=0;i<chestsAmount;i++){
-                    if(this.intersect(chests[i])){
+                    if(this.within(chests[i],40)){
                         if(chests[i].special == true){
                             console.log('RIGHT CHEST'); 
                         }else{
                             console.log('TRY AGAIN');
+                            chests[i].remove();
                         }
                     }     
                 }
@@ -116,7 +157,7 @@ window.onload = function(){
                 this.movement();
             },
             remove: function(){
-                game.rootScene.removeChild(this);
+                stage.removeChild(this);
             },
             movement: function(){
                 this.toX = this.x;
@@ -185,7 +226,7 @@ window.onload = function(){
                 this.movement();
             },
             remove: function(){
-                game.rootScene.removeChild(this);
+                stage.removeChild(this);
             },
             movement: function(){
                 this.toX = this.x;
@@ -251,17 +292,17 @@ window.onload = function(){
                 this.special = false;
             },
             remove:function(){
-                game.rootScene.removeChild(this);
+                stage.removeChild(this);
             }
         });
 
         var Guard = enchant.Class.create(enchant.Sprite,{
-            initialize:function(chestx,chesty,theta,speed){
+            initialize:function(x,y,theta,speed){
                 enchant.Sprite.call(this,32,32);
                 this.image = game.assets['images/chara6.png'];
                 this.frame = 5;
-                this.x = chestx-10;
-                this.y = chesty-30;
+                this.x = x;
+                this.y = y;
                 this.direction = 0;
                 this.moveSpeed = speed;
                 this.theta = theta*Math.PI / 180;
@@ -269,7 +310,7 @@ window.onload = function(){
             
             },
             remove:function(){
-                game.rootScene.removeChild(this);
+                stage.removeChild(this);
             },
             movement:function(){
 
@@ -290,22 +331,44 @@ window.onload = function(){
 
         }
 
+        var stage = new Group();
+        stage.addChild(map);
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
         var player2 = new Player2(player1.x-32,player1.y-32,0);
         
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
-            game.rootScene.addChild(chests[i]);
-            var circle = rand(15);
-            guards.push(new Guard(chests[i].x,chests[i].y,circle,2));
-            game.rootScene.addChild(guards[i]);
+            stage.addChild(chests[i]);
         }
+
+        guards.push(new Guard(60,40,5,2));
+        guards.push(new Guard(140,40,5,2));
+        guards.push(new Guard(240,40,6,-2));
+        guards.push(new Guard(50,120,4,-2));
+        guards.push(new Guard(150,120,4,2));
+        guards.push(new Guard(245,120,5,-2));
+        guards.push(new Guard(55,200,5,2));
+        guards.push(new Guard(160,200,3,-2));
+        guards.push(new Guard(230,200,6,2));
+        stage.addChild(guards[0]);
+        stage.addChild(guards[1]);
+        stage.addChild(guards[2]);
+        stage.addChild(guards[3]);
+        stage.addChild(guards[4]);
+        stage.addChild(guards[5]);
+        stage.addChild(guards[6]);
+        stage.addChild(guards[7]);
+        stage.addChild(guards[8]);
+
+
         chests[rand(chestsAmount)].special = true;
 
-        game.rootScene.addChild(enemy1);
-        game.rootScene.addChild(player1);
-        game.rootScene.addChild(player2);
+
+        stage.addChild(enemy1);
+        stage.addChild(player1);
+        stage.addChild(player2);
+        game.rootScene.addChild(stage);
         
         };
     game.start();
