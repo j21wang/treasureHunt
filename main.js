@@ -6,7 +6,6 @@ var DIR_DOWN = 3;
 var chestsAmount = 3;
 var chests = [];
 var guardAmount = chestsAmount;
-
 var guards = [];
 
 enchant();
@@ -76,6 +75,7 @@ window.onload = function(){
                         this.frame = this.anim[this.dir*4 + (this.age%4)];
                     
                     this.checkChest();
+                    this.checkEnemy();
                 });       
             },
             checkChest: function(){
@@ -87,6 +87,18 @@ window.onload = function(){
                             console.log('TRY AGAIN');
                         }
                     }     
+                }
+            },
+            checkEnemy: function(){
+                for(var i=0;i<guardAmount+1;i++){
+                    if(this.intersect(guards[i])){
+                        //lower life, reset position
+                        console.log("HIT A GUARD");
+                    }
+                    if(this.intersect(enemy1)){
+                        //lower life, reset both characters and enemy positions
+                        console.log("HIT ENEMY");
+                    }
                 }
             }
 
@@ -118,8 +130,7 @@ window.onload = function(){
                     15,16,17,16, //left
                     24,25,26,25, //right
                     33,34,35,34, //up
-                    6,7,8,7]; //down
-         
+                    6,7,8,7]; //down     
 
                 this.addEventListener(Event.ENTER_FRAME,function(e){
                    if(this.y>this.toY){
@@ -242,7 +253,6 @@ window.onload = function(){
             }
         });
 
-        //UNFINISHED
         var Guard = enchant.Class.create(enchant.Sprite,{
             initialize:function(chestx,chesty,theta,speed){
                 enchant.Sprite.call(this,32,32);
@@ -274,10 +284,14 @@ window.onload = function(){
         function rand(num){
             return Math.floor(Math.random() * num);
         }
-        
+        function level(){
+
+        }
+
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
         var player2 = new Player2();
+        var enemy2 = new Enemy(player1.x-32,player1.y-32,0);
         
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
@@ -285,15 +299,13 @@ window.onload = function(){
             var circle = rand(15);
             guards.push(new Guard(chests[i].x,chests[i].y,circle,2));
             game.rootScene.addChild(guards[i]);
-            //UNFINISHED
         }
-
         chests[rand(chestsAmount)].special = true;
 
         game.rootScene.addChild(enemy1);
+        game.rootScene.addChild(enemy2);
         game.rootScene.addChild(player1);
         game.rootScene.addChild(player2);
-
         
         };
     game.start();
