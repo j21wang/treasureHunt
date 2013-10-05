@@ -7,15 +7,20 @@ var chestsAmount = 3;
 var chests = [];
 var guardAmount = chestsAmount;
 var guards = [];
-var aim;
 var select;
 var level = 1;
+var aim1;
+var bombAmount = chestsAmount;
+var bombs = [];
+var player1;
+//var player2;
+var enemy1;
 
 enchant();
 window.onload = function(){
     var game = new Core(320,400);
     game.fps=16;
-    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png');
+    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png','images/icon0.png','images/effect0.png');
 
     game.onload = function(){
         var map = new Map(16,16);
@@ -138,13 +143,12 @@ window.onload = function(){
 
                     }     
                 }
-                console.log(chests);
                 if(chests.length == 0){
                     select = makeSelect("[NEXT LEVEL]",200);
                     level++;
                     stage.addChild(select);
                     player1.remove();
-                    player2.remove();
+                    //player2.remove();
                     enemy1.remove();
                     aim1.remove();
                     for(var i=0;i<guards.length;i++){
@@ -158,8 +162,8 @@ window.onload = function(){
                         if(level == 2){
                             new Enemy(160,160,1);
                             new Player1();
-                            new Player2(player1.x-32,player1.y-32,0);
-                            new Aim(player2.x,player2.y);
+                            //new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
                                 chests.push(new Chest(rand(304),rand(304)));
@@ -179,13 +183,13 @@ window.onload = function(){
 
                             stage.addChild(enemy1);
                             stage.addChild(player1);
-                            stage.addChild(player2);
+                            //stage.addChild(player2);
                             stage.addChild(aim1);
                         } else if(level == 3){
                             new Enemy(160,160,2);
                             new Player1();
-                            new Player2(player1.x-32,player1.y-32,0);
-                            new Aim(player2.x,player2.y);
+                            //new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
                                 chests.push(new Chest(rand(304),rand(304)));
@@ -207,14 +211,14 @@ window.onload = function(){
 
                             stage.addChild(enemy1);
                             stage.addChild(player1);
-                            stage.addChild(player2);
+                            //stage.addChild(player2);
                             stage.addChild(aim1);
 
                         } else if(level == 4){
                             new Enemy(160,160,3);
                             new Player1();
-                            new Player2(player1.x-32,player1.y-32,0);
-                            new Aim(player2.x,player2.y);
+                            //new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
                                 chests.push(new Chest(rand(304),rand(304)));
@@ -238,15 +242,15 @@ window.onload = function(){
 
                             stage.addChild(enemy1);
                             stage.addChild(player1);
-                            stage.addChild(player2);
+                            //stage.addChild(player2);
                             stage.addChild(aim1);
 
 
                         } else if(level == 5){
                             new Enemy(160,160,4);
                             new Player1();
-                            new Player2(player1.x-32,player1.y-32,0);
-                            new Aim(player2.x,player2.y);
+                            //new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
                                 chests.push(new Chest(rand(304),rand(304)));
@@ -272,15 +276,15 @@ window.onload = function(){
 
                             stage.addChild(enemy1);
                             stage.addChild(player1);
-                            stage.addChild(player2);
+                            //stage.addChild(player2);
                             stage.addChild(aim1);
 
 
                         } else if(level == 6){
                             new Enemy(160,160,2);
                             new Player1();
-                            new Player2(player1.x-32,player1.y-32,0);
-                            new Aim(player2.x,player2.y);
+                            //new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
                                 chests.push(new Chest(rand(304),rand(304)));
@@ -308,7 +312,7 @@ window.onload = function(){
 
                             stage.addChild(enemy1);
                             stage.addChild(player1);
-                            stage.addChild(player2);
+                            //stage.addChild(player2);
                             stage.addChild(aim1);
                         }
                         guardAmount++;
@@ -319,18 +323,18 @@ window.onload = function(){
                 for(var i=0;i<guardAmount+1;i++){
                     if(this.intersect(guards[i])){
                         //lower life, reset position
-                        console.log("HIT A GUARD");
+                        // console.log("HIT A GUARD");
                     }
                     if(this.intersect(enemy1)){
                         //lower life, reset both characters and enemy positions
-                        console.log("HIT ENEMY");
+                        // console.log("HIT ENEMY");
                     }
                 }
             }
 
         });
 
-        var Player2 = enchant.Class.create(enchant.Sprite,{
+        /*var Player2 = enchant.Class.create(enchant.Sprite,{
             initialize: function(x,y,speed){
                 enchant.Sprite.call(this,32,32);
                 this.image = game.assets['images/chara5.png'];
@@ -395,7 +399,7 @@ window.onload = function(){
                     }
              });
           }  
-        });
+        });*/
 
 
         var Enemy = enchant.Class.create(enchant.Sprite,{
@@ -506,23 +510,60 @@ window.onload = function(){
             }
         });
 
-        Aim = enchant.Class.create(enchant.Sprite,{
-            initialize:function(player2x,player2y){
+        var Bomb = enchant.Class.create(enchant.Sprite,{
+            initialize:function(){
+               enchant.Sprite.call(this,16,16);
+               this.image = game.assets['images/icon0.png'];
+               this.frame = 25;
+               // this.x = aim1.x;
+               // this.y = aim1.y;
+            },
+            remove: function(){
+                for(var i = 0; i<guardAmount; i++){
+                    this.moveTo(aim1.x,aim1.y);
+                    if(this.intersect(guards[i])){
+                        guards[i].remove();
+                    }else if(this.intersect(enemy1)){
+                        enemy1.remove();
+                    }
+                        this.image = game.assets['images/effect0.png'];
+                        this.frame = 25;
+                    }
+                        stage.removeChild(this);
+                }
+        });
+
+        var Aim = enchant.Class.create(enchant.Sprite,{
+            initialize:function(playerx,playery){
                enchant.Sprite.call(this,32,32);
                this.image = game.assets['images/reticle.png'];
                this.frame = 0;
+               this.x = player1.x -10;
+               this.y = player1.y -10;
+               // this.movement();
             },
             remove: function(){
             },
             movement:function(){
+                this.addEventListener(Event.ENTER_FRAME,function(e){
+                    for(var i=0;i<bombAmount;i++){
+                        bombs[i] = new Bomb();
+                        bombs[i].x = player1.x;
+                        bombs[i].y = player1.y;
+                        stage.addChild(bombs[i]); 
+                        if(bombs[i].age < 20){
+                            bombs[i].remove();
+                        }
+                    }
+                });
             }
         });
 
-        var enemy1 = new Enemy(160,160,0);
-        var player1 = new Player1();
-        var player2 = new Player2(player1.x-32,player1.y-32,0);
-        var aim1 = new Aim(player2.x,player2.y);
-
+        enemy1 = new Enemy(160,160,0);
+        player1 = new Player1();
+        //player2 = new Player2(player1.x-32,player1.y-32,0);
+        aim1 = new Aim(player1.x,player1.y);
+       
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
             stage.addChild(chests[i]);
@@ -539,7 +580,7 @@ window.onload = function(){
 
         stage.addChild(enemy1);
         stage.addChild(player1);
-        stage.addChild(player2);
+        //stage.addChild(player2);
         stage.addChild(aim1);
         game.rootScene.addChild(stage);
         
