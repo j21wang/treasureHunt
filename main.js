@@ -12,6 +12,7 @@ var guards = [];
 enchant();
 window.onload = function(){
     var game = new Core(320,320);
+    game.fps=16;
     game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png');
 
     game.onload = function(){
