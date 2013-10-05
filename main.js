@@ -20,11 +20,16 @@ enchant();
 window.onload = function(){
     var game = new Core(320,400);
     game.fps=16;
-    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png','images/icon0.png','images/effect0.png');
+    game.preload('sounds/shot5.wav','sounds/se3.wav','sounds/se6.wav','sounds/walk1.wav','sounds/se2.wav','images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png','images/icon0.png','images/effect0.png');
 
     game.onload = function(){
         var map = new Map(16,16);
         map.image = game.assets['images/map0.png'];
+        game.walk = game.assets['sounds/walk1.wav'];
+        game.shot = game.assets['sounds/shot5.wav'];
+        game.se2 = game.assets['sounds/se2.wav'];
+        game.se3 = game.assets['sounds/se3.wav'];
+        game.se6 = game.assets['sounds/se6.wav'];
  
         var stage = new Group();
         stage.addChild(map);
@@ -114,18 +119,22 @@ window.onload = function(){
                             this.dir = DIR_UP;
                             if(this.y > 0)
                             this.y -= 4;
+                            game.walk.play();
                         } else if(game.input.down){
                             this.dir = DIR_DOWN;
                             if(this.y < 320 - this.height-16)
                             this.y += 4;
+                            game.walk.play();
                         } else if(game.input.left){
                             this.dir = DIR_LEFT;
                             if(this.x > 0+this.height-25)
                             this.x -= 4;
+                            game.walk.play();
                         } else if(game.input.right){
                             this.dir = DIR_RIGHT;
                             if(this.x < 320 - this.width-5)
                             this.x += 4;
+                            game.walk.play();
                         }
 
                         if(!game.input.up && !game.input.down && !game.input.left && !game.input.right) this.age = 1;
@@ -138,12 +147,14 @@ window.onload = function(){
             checkChest: function(){
                 for(var i=0;i<guardAmount;i++){
                     if(this.intersect(chests[i])){
+                            game.se2.play();
                             chests[i].remove();
                             chests.splice(i,1);
 
                     }     
                 }
                 if(chests.length == 0){
+                    game.se6.play();
                     select = makeSelect("[NEXT LEVEL]",200);
                     level++;
                     stage.addChild(select);
@@ -322,10 +333,12 @@ window.onload = function(){
             checkEnemy: function(){
                 for(var i=0;i<guardAmount+1;i++){
                     if(this.intersect(guards[i])){
+                        game.se3.play();
                         //lower life, reset position
                         // console.log("HIT A GUARD");
                     }
                     if(this.intersect(enemy1)){
+                        game.se3.play();
                         //lower life, reset both characters and enemy positions
                         // console.log("HIT ENEMY");
                     }
@@ -421,10 +434,10 @@ window.onload = function(){
                 this.toY = this.y;
                 this.dir = DIR_DOWN;
                 this.anim = [
-                15,16,17,16, //Left
-                24,25,26,24, //Right
-                33,34,35,34, //Up
-                6,7,8,7]; //Down
+                9,10,11,10, //Left
+                18,19,20,19, //Right
+                27,28,29,28, //Up
+                0,1,2,1]; //Down
                 
                 this.addEventListener(Event.ENTER_FRAME,function(){
                 if(this.y>this.toY){
@@ -461,10 +474,23 @@ window.onload = function(){
                 if (this.x == this.toX && this.y == this.toY) this.age = 1;
                 this.frame = this.anim[this.dir*4 + (this.age % 4)];
 
-                    if(!this.intersect(player1)){
+                    if(!this.within(player1,30)){
                         this.toX = player1.x;
                         this.toY = player1.y;
+                        this.anim = [
+                        9,10,11,10, //Left
+                        18,19,20,19, //Right
+                        27,28,29,28, //Up
+                        0,1,2,1]; //Down
+                        
                     } else {
+                        this.anim = [
+                        15,16,17,16, //Left
+                        24,25,26,25, //Right
+                        32,33,34,33, //Up
+                        6,7,8,7]; //Down
+                        
+
                     }
              });
           }  
@@ -522,8 +548,10 @@ window.onload = function(){
                 for(var i = 0; i<guardAmount; i++){
                     this.moveTo(aim1.x,aim1.y);
                     if(this.intersect(guards[i])){
+                        game.bomb.play();
                         guards[i].remove();
                     }else if(this.intersect(enemy1)){
+                        game.bomb.play();
                         enemy1.remove();
                     }
                         this.image = game.assets['images/effect0.png'];
@@ -553,6 +581,7 @@ window.onload = function(){
                         stage.addChild(bombs[i]); 
                         if(bombs[i].age < 20){
                             bombs[i].remove();
+                            game.bomb.play();
                         }
                     }
                 });
