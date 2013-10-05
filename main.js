@@ -7,12 +7,13 @@ var chestsAmount = 3;
 var chests = [];
 var guardAmount = chestsAmount;
 var guards = [];
+var aim;
 
 enchant();
 window.onload = function(){
     var game = new Core(320,320);
     game.fps=16;
-    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png');
+    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png');
 
     game.onload = function(){
         var map = new Map(16,16);
@@ -323,20 +324,24 @@ window.onload = function(){
             }
         });
 
-        //helpers
-        function rand(num){
-            return Math.floor(Math.random() * num);
-        }
-        function level(){
-
-        }
-
+        Aim = enchant.Class.create(enchant.Sprite,{
+            initialize:function(player2x,player2y){
+               enchant.Sprite.call(this,32,32);
+               this.image = game.assets['images/reticle.png'];
+               this.frame = 0;
+            },
+            remove: function(){
+            },
+            movement:function(){
+            }
+        });
 
         var stage = new Group();
         stage.addChild(map);
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
         var player2 = new Player2(player1.x-32,player1.y-32,0);
+        var aim1 = new Aim(player2.x,player2.y);
        
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
@@ -365,6 +370,7 @@ window.onload = function(){
         stage.addChild(enemy1);
         stage.addChild(player1);
         stage.addChild(player2);
+        stage.addChild(aim1);
         game.rootScene.addChild(stage);
         
         };
@@ -381,4 +387,10 @@ function makeSelect(text,y){
     return label;
 }
 
+function rand(num){
+    return Math.floor(Math.random() * num);
+}
+        
+function level(){
 
+}
