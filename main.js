@@ -10,7 +10,6 @@ window.onload = function(){
     game.preload('images/chara5.png','images/map0.png');
 
     game.onload = function(){
-        //background
         var bg = new Sprite(320,320);
         var maptip = game.assets['images/map0.png'];
         var image = new Surface(320,320);
@@ -22,13 +21,49 @@ window.onload = function(){
         bg.image = image;
         game.rootScene.addChild(bg);
 
-        //player 1 class
         var Player1 = enchant.Class.create(enchant.Sprite,{
             initialize: function(){
-
+                enchant.Sprite.call(this,32,32);
+                this.image = game.assets['images/chara5.png'];
+                this.x = null;
+                this.y = null;
+                this.dir = null;
+                this.anim = null;
+                this.frame = 7;
+                this.movement();
             },
             remove: function(){
 
+            },
+            movement: function(){
+                this.x = 100;
+                this.y = 16;
+                this.dir = DIR_DOWN;
+                this.anim = [
+                    9,10,11,10, //left
+                    18,19,20,19, //right
+                    27,28,29,28, //up
+                    0,1,2,1]; //down
+         
+                this.addEventListener(Event.ENTER_FRAME,function(e){
+                    if(game.input.up){
+                        this.dir = DIR_UP;
+                        this.y -= 4;
+                    } else if(game.input.down){
+                        this.dir = DIR_DOWN;
+                        this.y += 4;
+                    } else if(game.input.left){
+                        this.dir = DIR_LEFT;
+                        this.x -= 4;
+                    } else if(game.input.right){
+                        this.dir = DIR_RIGHT;
+                        this.x += 4;
+                    }
+
+
+                    if(!game.input.up && !game.input.down && !game.input.left && !game.input.right) this.age = 1;
+                    this.frame = this.anim[this.dir*4 + (this.age%4)];
+                });       
             }
         });
 
@@ -39,12 +74,12 @@ window.onload = function(){
                 this.x = x - 16;
                 this.y = y - 16;
                 this.frame = 7; 
-                this.hey();
+                this.movement();
             },
             remove: function(){
 
             },
-            hey: function(){
+            movement: function(){
                 this.toX = this.x;
                 this.toY = this.y;
                 this.dir = DIR_DOWN;
@@ -55,7 +90,6 @@ window.onload = function(){
                 6,7,8,7]; //Down
                 
                 this.addEventListener(Event.ENTER_FRAME,function(){
-                /* If the current Y position is lower (greater) than destination (toY), the direction should be set as DIR_UP and the this should be moved up by 3 px each frame, unless its current Y position is within 3 px of the destination (abs val check) */
                 if(this.y>this.toY){
                     this.dir = DIR_UP;
                     if(Math.abs(this.y - this.toY)<3){
@@ -87,34 +121,24 @@ window.onload = function(){
                         this.x += 3;
                     }
                 }
-
-                /* If this is not moving, age should be made equal to 1. Every frame, the this's age will increase; however, if he is standing still, his age will reset to 1. Used in the frame assignment on the next line to keep the this from being animated if he is not moving. */
                 if (this.x == this.toX && this.y == this.toY) this.age = 1;
-                /* The frame is assigned as a number from the array of values we specified earlier. The code means that the frame of the this should cycle through the four frames of a given direction the this is traveling in or facing. */
                 this.frame = this.anim[this.dir*4 + (this.age % 4)];
+
+                this.addEventListener(Event.ENTER_FRAME,function(e){
+                    if(!this.intersect(player1)){
+                        this.toX = player1.x;
+                        this.toY = player1.y;
+                    } else {
+                    }
+                });
              });
-                
           }  
         });
         
         var enemy1 = new Enemy(160,160,0);
-        var enemy2 = new Enemy(130,130,0);
-        console.log("HI!");
+        var player1 = new Player1();
         game.rootScene.addChild(enemy1);
-        game.rootScene.addChild(enemy2);
-            
-            bg.addEventListener(Event.TOUCH_START,function(e){
-                 enemy1.toX = e.x-16;
-                 enemy1.toY = e.y-16;
-                 enemy2.toX = e.x-16;
-                 enemy2.toY = e.y-16;
-             });
-
-             bg.addEventListener(Event.TOUCH_MOVE,function(e){
-                 enemy2.toX = e.x-16;
-                 enemy2.toY = e.y-16;
-             });
-
+        game.rootScene.addChild(player1);
         };
     game.start();
 
