@@ -15,7 +15,6 @@ var bombs = [];
 var player1;
 //var player2;
 var enemy1;
-var life;
 var score;
 
 enchant();
@@ -25,7 +24,6 @@ window.onload = function(){
     game.preload('sounds/shot5.wav','sounds/se3.wav','sounds/se6.wav','sounds/walk1.wav','sounds/se2.wav','images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png','images/icon0.png','images/effect0.png');
 
     game.onload = function(){
-        game.life = 5;
         game.score = 0;
         
         var map = new Map(16,16);
@@ -39,10 +37,8 @@ window.onload = function(){
         var stage = new Group();
         stage.addChild(map);
         
-        life = makeSelect("Life: " + game.life , 250);
-        stage.addChild(life);
 
-        score = makeSelect("Score: " + game.score , 270);
+        score = makeSelect("   Score: " + game.score , 270);
         stage.addChild(score);
 
         map.loadData([
@@ -192,7 +188,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(32,272),rand(32,272)));
+                                chests.push(new Chest(rand(32,250),rand(32,250)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -218,7 +214,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(32,277),rand(32,272)));
+                                chests.push(new Chest(rand(32,250),rand(32,250)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -247,7 +243,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(32,272),rand(32,272)));
+                                chests.push(new Chest(rand(32,250),rand(32,250)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -279,7 +275,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(32,272),rand(32,272)));
+                                chests.push(new Chest(rand(32,250),ra50(32,250)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -313,7 +309,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(32,272),rand(32,272)));
+                                chests.push(new Chest(rand(32,250),rand(32,250)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -353,6 +349,10 @@ window.onload = function(){
                 for(var i=0;i<guardAmount+1;i++){   
                     if(this.intersect(guards[i])){
                         game.se3.play();
+                        //stage.removeChild(guards[i]);
+                        //player1.x = 16;
+                        //player1.y = 16;
+                        
                         //lower life, reset position
                         // console.log("HIT A GUARD");
                     }
@@ -360,15 +360,11 @@ window.onload = function(){
                         game.se3.play();
                             stage.removeChild(enemy1);
                             enemy1 = new Enemy();
-                            enemy1.x = rand(32,320 -enemy1.width);
-                            enemy1.y = rand(32,320 -enemy1.height);
+                            enemy1.x = rand(32,320 -enemy1.width-20);
+                            enemy1.y = rand(32,320 -enemy1.height-20);
                             stage.addChild(enemy1);
-                            game.life = game.life- 1;
-                            player1.x = 32;
-                            player1.y = 32;
-                            stage.removeChild(life);
-                            life = makeSelect("Life: " + game.life , 250);
-                            stage.addChild(life); 
+                            player1.x = 16;
+                            player1.y = 16;
                     }
                 }
             }
@@ -501,7 +497,7 @@ window.onload = function(){
                 if (this.x == this.toX && this.y == this.toY) this.age = 1;
                 this.frame = this.anim[this.dir*4 + (this.age % 4)];
 
-                    if(!this.within(player1,30)){
+                    if(!this.within(player1,100)){
                         this.toX = player1.x;
                         this.toY = player1.y;
                         this.anim = [
@@ -575,10 +571,10 @@ window.onload = function(){
                 for(var i = 0; i<guardAmount; i++){
                     this.moveTo(aim1.x,aim1.y);
                     if(this.intersect(guards[i])){
-                        game.bomb.play();
+                        game.shot.play();
                         guards[i].remove();
                     }else if(this.intersect(enemy1)){
-                        game.bomb.play();
+                        game.shot.play();
                         enemy1.remove();
                     }
                         this.image = game.assets['images/effect0.png'];
@@ -621,7 +617,7 @@ window.onload = function(){
         aim1 = new Aim(player1.x,player1.y);
        
         for(var i=0;i<chestsAmount;i++){
-            chests.push(new Chest(rand(32,272),rand(32,272)));
+            chests.push(new Chest(rand(32,250),rand(32,250)));
             stage.addChild(chests[i]);
         }
 
@@ -647,10 +643,10 @@ window.onload = function(){
 
 function makeSelect(text,y){
     var label = new Label(text);
-    label.font = "16px monoscape";
+    label.font = "30px monospace";
     label.color = "red";
-    label.x = 20;
-    label.y = y+75;
+    label.x = 50;
+    label.y = y+60;
     label.width = 320;
     return label;
 }
