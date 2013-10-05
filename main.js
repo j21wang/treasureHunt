@@ -6,6 +6,7 @@ var DIR_DOWN = 3;
 var chestsAmount = 3;
 var chests = [];
 var guardAmount = chestsAmount;
+
 var guards = [];
 
 enchant();
