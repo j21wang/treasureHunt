@@ -192,7 +192,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(304),rand(304)));
+                                chests.push(new Chest(rand(32,272),rand(32,272)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -218,7 +218,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(304),rand(304)));
+                                chests.push(new Chest(rand(32,277),rand(32,272)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -247,7 +247,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(304),rand(304)));
+                                chests.push(new Chest(rand(32,272),rand(32,272)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -279,7 +279,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(304),rand(304)));
+                                chests.push(new Chest(rand(32,272),rand(32,272)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -313,7 +313,7 @@ window.onload = function(){
                             new Aim(player1.x,player1.y);
 
                             for(var i=0;i<guardAmount;i++){
-                                chests.push(new Chest(rand(304),rand(304)));
+                                chests.push(new Chest(rand(32,272),rand(32,272)));
                                 stage.addChild(chests[i]);
                             }
 
@@ -340,6 +340,10 @@ window.onload = function(){
                             stage.addChild(player1);
                             //stage.addChild(player2);
                             stage.addChild(aim1);
+                        } else {
+                            //game.end(game.score, "Your score is " + game.score);
+                            alert("YOUR SCORE IS " + game.score);
+
                         }
                         guardAmount++;
                     });
@@ -356,8 +360,8 @@ window.onload = function(){
                         game.se3.play();
                             stage.removeChild(enemy1);
                             enemy1 = new Enemy();
-                            enemy1.x = rand(320 -enemy1.width);
-                            enemy1.y = rand(320 -enemy1.height);
+                            enemy1.x = rand(32,320 -enemy1.width);
+                            enemy1.y = rand(32,320 -enemy1.height);
                             stage.addChild(enemy1);
                             game.life = game.life- 1;
                             player1.x = 32;
@@ -617,7 +621,7 @@ window.onload = function(){
         aim1 = new Aim(player1.x,player1.y);
        
         for(var i=0;i<chestsAmount;i++){
-            chests.push(new Chest(rand(304),rand(304)));
+            chests.push(new Chest(rand(32,272),rand(32,272)));
             stage.addChild(chests[i]);
         }
 
@@ -651,8 +655,8 @@ function makeSelect(text,y){
     return label;
 }
 
-function rand(num){
-    return Math.floor(Math.random() * num);
+function rand(first,last){
+    return Math.floor(Math.random() *last + first);
 }
         
 
