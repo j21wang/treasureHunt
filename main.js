@@ -12,7 +12,7 @@ enchant();
 window.onload = function(){
     var game = new Core(320,320);
     game.fps=16;
-    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png');
+    game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png');
 
     game.onload = function(){
         var bg = new Sprite(320,320);
@@ -34,7 +34,7 @@ window.onload = function(){
                 this.y = null;
                 this.dir = null;
                 this.anim = null;
-                this.frame = 7;
+                this.frame = 6;
     
                 this.movement();                
             },
@@ -46,10 +46,10 @@ window.onload = function(){
                 this.y = 16;
                 this.dir = DIR_DOWN;
                 this.anim = [
-                    9,10,11,10, //left
-                    18,19,20,19, //right
-                    27,28,29,28, //up
-                    0,1,2,1]; //down
+                    15,16,17,16, //left
+                    24,25,26,25, //right
+                    33,34,35,34, //up
+                    6,7,8,7]; //down
          
                 this.addEventListener(Event.ENTER_FRAME,function(e){
 
@@ -105,35 +105,31 @@ window.onload = function(){
         });
 
         var Player2 = enchant.Class.create(enchant.Sprite,{
-            initialize: function(){
+            initialize: function(x,y,theta,speed){
                 enchant.Sprite.call(this,32,32);
-                this.image = game.assets['images/chara0.png'];
-                this.x = player1.x-10;
-                this.y = player1.y-10;
-                this.toX = player1.x;
-                this.toY = player1.y;
-                this.dir = null;
-                this.anim = null;
-                this.frame = 7;
-                this.moveSpeed = 2;
-                this.age = null;
-                this.movement();                
+                this.image = game.assets['images/chara5.png'];
+                this.x = x - 16;
+                this.y = y - 16;
+                this.theta = theta * Math.PI / 180;
+                this.frame = 7; 
+                this.moveSpeed = 4; //increase moveSpeed for harder levels
+                this.movement();
             },
             remove: function(){
                 game.rootScene.removeChild(this);
             },
             movement: function(){
-                this.x = 100;
-                this.y = 16;
+                this.toX = this.x;
+                this.toY = this.y;
                 this.dir = DIR_DOWN;
                 this.anim = [
-                    15,16,17,16, //left
-                    24,25,26,25, //right
-                    33,34,35,34, //up
-                    6,7,8,7]; //down     
-
-                this.addEventListener(Event.ENTER_FRAME,function(e){
-                   if(this.y>this.toY){
+                15,16,17,16, //Left
+                24,25,26,24, //Right
+                33,34,35,34, //Up
+                6,7,8,7]; //Down
+                
+                this.addEventListener(Event.ENTER_FRAME,function(){
+                if(this.y>this.toY){
                     this.dir = DIR_UP;
                     if(Math.abs(this.y - this.toY)<3){
                         this.y = this.toY;
@@ -166,15 +162,21 @@ window.onload = function(){
                 }
                 if (this.x == this.toX && this.y == this.toY) this.age = 1;
                 this.frame = this.anim[this.dir*4 + (this.age % 4)];
-                });       
-            }
+
+                    if(!this.intersect(player1)){
+                        this.toX = player1.x;
+                        this.toY = player1.y;
+                    } else {
+                    }
+             });
+          }  
         });
 
 
         var Enemy = enchant.Class.create(enchant.Sprite,{
             initialize: function(x,y,theta,speed){
                 enchant.Sprite.call(this,32,32);
-                this.image = game.assets['images/chara5.png'];
+                this.image = game.assets['images/chara7.png'];
                 this.x = x - 16;
                 this.y = y - 16;
                 this.theta = theta * Math.PI / 180;
@@ -290,8 +292,7 @@ window.onload = function(){
 
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
-        var player2 = new Player2();
-        var enemy2 = new Enemy(player1.x-32,player1.y-32,0);
+        var player2 = new Player2(player1.x-32,player1.y-32,0);
         
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
@@ -303,7 +304,6 @@ window.onload = function(){
         chests[rand(chestsAmount)].special = true;
 
         game.rootScene.addChild(enemy1);
-        game.rootScene.addChild(enemy2);
         game.rootScene.addChild(player1);
         game.rootScene.addChild(player2);
         
