@@ -15,6 +15,8 @@ var bombs = [];
 var player1;
 //var player2;
 var enemy1;
+var life;
+var score;
 
 enchant();
 window.onload = function(){
@@ -23,6 +25,9 @@ window.onload = function(){
     game.preload('sounds/shot5.wav','sounds/se3.wav','sounds/se6.wav','sounds/walk1.wav','sounds/se2.wav','images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png','images/icon0.png','images/effect0.png');
 
     game.onload = function(){
+        game.life = 5;
+        game.score = 0;
+        
         var map = new Map(16,16);
         map.image = game.assets['images/map0.png'];
         game.walk = game.assets['sounds/walk1.wav'];
@@ -33,7 +38,13 @@ window.onload = function(){
  
         var stage = new Group();
         stage.addChild(map);
-       
+        
+        life = makeSelect("Life: " + game.life , 250);
+        stage.addChild(life);
+
+        score = makeSelect("Score: " + game.score , 270);
+        stage.addChild(score);
+
         map.loadData([
               [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
               [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
@@ -150,6 +161,10 @@ window.onload = function(){
                             game.se2.play();
                             chests[i].remove();
                             chests.splice(i,1);
+                            game.score += 10; 
+                            stage.removeChild(score);
+                            score = makeSelect("Score: " + game.score , 270);
+                            stage.addChild(score);
 
                     }     
                 }
@@ -331,16 +346,25 @@ window.onload = function(){
                 }
             },
             checkEnemy: function(){
-                for(var i=0;i<guardAmount+1;i++){
+                for(var i=0;i<guardAmount+1;i++){   
                     if(this.intersect(guards[i])){
                         game.se3.play();
                         //lower life, reset position
                         // console.log("HIT A GUARD");
                     }
-                    if(this.intersect(enemy1)){
+                      if(this.intersect(enemy1)){
                         game.se3.play();
-                        //lower life, reset both characters and enemy positions
-                        // console.log("HIT ENEMY");
+                            stage.removeChild(enemy1);
+                            enemy1 = new Enemy();
+                            enemy1.x = rand(320 -enemy1.width);
+                            enemy1.y = rand(320 -enemy1.height);
+                            stage.addChild(enemy1);
+                            game.life = game.life- 1;
+                            player1.x = 32;
+                            player1.y = 32;
+                            stage.removeChild(life);
+                            life = makeSelect("Life: " + game.life , 250);
+                            stage.addChild(life); 
                     }
                 }
             }
@@ -413,7 +437,6 @@ window.onload = function(){
              });
           }  
         });*/
-
 
         var Enemy = enchant.Class.create(enchant.Sprite,{
             initialize: function(x,y,theta,speed){
