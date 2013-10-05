@@ -75,7 +75,7 @@ window.onload = function(){
                 this.dir = null;
                 this.anim = null;
                 this.frame = 6;
-    
+                this.chestCount = 0;
                 this.movement();                
             },
             remove: function(){
@@ -120,14 +120,16 @@ window.onload = function(){
             },
             checkChest: function(){
                 for(var i=0;i<chestsAmount;i++){
-                    if(this.within(chests[i],40)){
-                        if(chests[i].special == true){
-                            console.log('RIGHT CHEST'); 
-                        }else{
-                            console.log('TRY AGAIN');
+                    if(this.intersect(chests[i])){
                             chests[i].remove();
-                        }
+                            chests.splice(i,1);
+
                     }     
+                }
+                console.log(chests);
+                //var select = makeSelect("[NEXT LEVEL]",200);
+                if(chests.length == 0){
+                    
                 }
             },
             checkEnemy: function(){
@@ -146,12 +148,11 @@ window.onload = function(){
         });
 
         var Player2 = enchant.Class.create(enchant.Sprite,{
-            initialize: function(x,y,theta,speed){
+            initialize: function(x,y,speed){
                 enchant.Sprite.call(this,32,32);
                 this.image = game.assets['images/chara5.png'];
-                this.x = x - 16;
-                this.y = y - 16;
-                this.theta = theta * Math.PI / 180;
+                this.x = x;
+                this.y = y;
                 this.frame = 7; 
                 this.moveSpeed = 4; //increase moveSpeed for harder levels
                 this.movement();
@@ -289,7 +290,6 @@ window.onload = function(){
                 this.frame = 25;
                 this.x = x;
                 this.y = y;
-                this.special = false;
             },
             remove:function(){
                 stage.removeChild(this);
@@ -331,39 +331,36 @@ window.onload = function(){
 
         }
 
+
         var stage = new Group();
         stage.addChild(map);
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
         var player2 = new Player2(player1.x-32,player1.y-32,0);
-        
+       
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
             stage.addChild(chests[i]);
         }
 
         guards.push(new Guard(60,40,5,2));
-        guards.push(new Guard(140,40,5,2));
+        //guards.push(new Guard(140,40,5,2));
         guards.push(new Guard(240,40,6,-2));
-        guards.push(new Guard(50,120,4,-2));
+        //guards.push(new Guard(50,120,4,-2));
         guards.push(new Guard(150,120,4,2));
-        guards.push(new Guard(245,120,5,-2));
+        //guards.push(new Guard(245,120,5,-2));
         guards.push(new Guard(55,200,5,2));
-        guards.push(new Guard(160,200,3,-2));
+        //guards.push(new Guard(160,200,3,-2));
         guards.push(new Guard(230,200,6,2));
         stage.addChild(guards[0]);
         stage.addChild(guards[1]);
         stage.addChild(guards[2]);
         stage.addChild(guards[3]);
         stage.addChild(guards[4]);
-        stage.addChild(guards[5]);
-        stage.addChild(guards[6]);
-        stage.addChild(guards[7]);
-        stage.addChild(guards[8]);
-
-
-        chests[rand(chestsAmount)].special = true;
-
+        //stage.addChild(guards[5]);
+        //stage.addChild(guards[6]);
+        //stage.addChild(guards[7]);
+        //stage.addChild(guards[8]);
 
         stage.addChild(enemy1);
         stage.addChild(player1);
@@ -374,3 +371,14 @@ window.onload = function(){
     game.start();
 
 };
+
+function makeSelect(text,y){
+    var label = new Label(text);
+    label.font = "16px monoscape";
+    label.color = "red";
+    label.y = y;
+    label.width = 320;
+    return label;
+}
+
+
