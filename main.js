@@ -8,19 +8,22 @@ var chests = [];
 var guardAmount = chestsAmount;
 var guards = [];
 var aim;
+var select;
+var level = 1;
 
 enchant();
 window.onload = function(){
-    var game = new Core(320,320);
+    var game = new Core(320,400);
     game.fps=16;
     game.preload('images/chara0.png','images/chara5.png','images/map0.png','images/chara6.png','images/chara7.png','images/reticle.png');
 
     game.onload = function(){
         var map = new Map(16,16);
         map.image = game.assets['images/map0.png'];
-        
-        var bg = new Sprite(320,320);
-        var bg = new Sprite(320,320);
+ 
+        var stage = new Group();
+        stage.addChild(map);
+       
         map.loadData([
               [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
               [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
@@ -41,7 +44,11 @@ window.onload = function(){
               [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
               [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
               [4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4],
-              [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+              [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+              [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
+              [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
+              [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
+              [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
               ]);
 
         map.collisionData = [
@@ -64,7 +71,11 @@ window.onload = function(){
               [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
               [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
               [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
               ];
 
         var Player1 = enchant.Class.create(enchant.Sprite,{
@@ -120,7 +131,7 @@ window.onload = function(){
                 });       
             },
             checkChest: function(){
-                for(var i=0;i<chestsAmount;i++){
+                for(var i=0;i<guardAmount;i++){
                     if(this.intersect(chests[i])){
                             chests[i].remove();
                             chests.splice(i,1);
@@ -128,9 +139,180 @@ window.onload = function(){
                     }     
                 }
                 console.log(chests);
-                //var select = makeSelect("[NEXT LEVEL]",200);
                 if(chests.length == 0){
-                    
+                    select = makeSelect("[NEXT LEVEL]",200);
+                    level++;
+                    stage.addChild(select);
+                    player1.remove();
+                    player2.remove();
+                    enemy1.remove();
+                    aim1.remove();
+                    for(var i=0;i<guards.length;i++){
+                        guards[i].remove();
+                    }
+
+                    select.addEventListener(Event.TOUCH_START,function(e){
+
+                        select.remove();
+
+                        if(level == 2){
+                            new Enemy(160,160,1);
+                            new Player1();
+                            new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player2.x,player2.y);
+
+                            for(var i=0;i<guardAmount;i++){
+                                chests.push(new Chest(rand(304),rand(304)));
+                                stage.addChild(chests[i]);
+                            }
+
+                            guards.push(new Guard(60,40,5,2));
+                            guards.push(new Guard(240,40,6,-2));
+                            guards.push(new Guard(150,120,4,2));
+                            guards.push(new Guard(55,200,5,2));
+                            guards.push(new Guard(230,200,6,2));
+                            stage.addChild(guards[0]);
+                            stage.addChild(guards[1]);
+                            stage.addChild(guards[2]);
+                            stage.addChild(guards[3]);
+                            stage.addChild(guards[4]);
+
+                            stage.addChild(enemy1);
+                            stage.addChild(player1);
+                            stage.addChild(player2);
+                            stage.addChild(aim1);
+                        } else if(level == 3){
+                            new Enemy(160,160,2);
+                            new Player1();
+                            new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player2.x,player2.y);
+
+                            for(var i=0;i<guardAmount;i++){
+                                chests.push(new Chest(rand(304),rand(304)));
+                                stage.addChild(chests[i]);
+                            }
+
+                            guards.push(new Guard(60,40,5,2));
+                            guards.push(new Guard(240,40,6,-2));
+                            guards.push(new Guard(50,120,4,-2));
+                            guards.push(new Guard(150,120,4,2));
+                            guards.push(new Guard(55,200,5,2));
+                            guards.push(new Guard(230,200,6,2));
+                            stage.addChild(guards[0]);
+                            stage.addChild(guards[1]);
+                            stage.addChild(guards[2]);
+                            stage.addChild(guards[3]);
+                            stage.addChild(guards[4]);
+                            stage.addChild(guards[5]);
+
+                            stage.addChild(enemy1);
+                            stage.addChild(player1);
+                            stage.addChild(player2);
+                            stage.addChild(aim1);
+
+                        } else if(level == 4){
+                            new Enemy(160,160,3);
+                            new Player1();
+                            new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player2.x,player2.y);
+
+                            for(var i=0;i<guardAmount;i++){
+                                chests.push(new Chest(rand(304),rand(304)));
+                                stage.addChild(chests[i]);
+                            }
+
+                            guards.push(new Guard(60,40,5,2));
+                            guards.push(new Guard(240,40,6,-2));
+                            guards.push(new Guard(50,120,4,-2));
+                            guards.push(new Guard(150,120,4,2));
+                            guards.push(new Guard(55,200,5,2));
+                            guards.push(new Guard(160,200,3,-2));
+                            guards.push(new Guard(230,200,6,2));
+                            stage.addChild(guards[0]);
+                            stage.addChild(guards[1]);
+                            stage.addChild(guards[2]);
+                            stage.addChild(guards[3]);
+                            stage.addChild(guards[4]);
+                            stage.addChild(guards[5]);
+                            stage.addChild(guards[6]);
+
+                            stage.addChild(enemy1);
+                            stage.addChild(player1);
+                            stage.addChild(player2);
+                            stage.addChild(aim1);
+
+
+                        } else if(level == 5){
+                            new Enemy(160,160,4);
+                            new Player1();
+                            new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player2.x,player2.y);
+
+                            for(var i=0;i<guardAmount;i++){
+                                chests.push(new Chest(rand(304),rand(304)));
+                                stage.addChild(chests[i]);
+                            }
+
+                            guards.push(new Guard(60,40,5,2));
+                            guards.push(new Guard(240,40,6,-2));
+                            guards.push(new Guard(50,120,4,-2));
+                            guards.push(new Guard(150,120,4,2));
+                            guards.push(new Guard(245,120,5,-2));
+                            guards.push(new Guard(55,200,5,2));
+                            guards.push(new Guard(160,200,3,-2));
+                            guards.push(new Guard(230,200,6,2));
+                            stage.addChild(guards[0]);
+                            stage.addChild(guards[1]);
+                            stage.addChild(guards[2]);
+                            stage.addChild(guards[3]);
+                            stage.addChild(guards[4]);
+                            stage.addChild(guards[5]);
+                            stage.addChild(guards[6]);
+                            stage.addChild(guards[7]);
+
+                            stage.addChild(enemy1);
+                            stage.addChild(player1);
+                            stage.addChild(player2);
+                            stage.addChild(aim1);
+
+
+                        } else if(level == 6){
+                            new Enemy(160,160,2);
+                            new Player1();
+                            new Player2(player1.x-32,player1.y-32,0);
+                            new Aim(player2.x,player2.y);
+
+                            for(var i=0;i<guardAmount;i++){
+                                chests.push(new Chest(rand(304),rand(304)));
+                                stage.addChild(chests[i]);
+                            }
+
+                            guards.push(new Guard(60,40,5,3));
+                            guards.push(new Guard(140,40,5,3));
+                            guards.push(new Guard(240,40,6,-3));
+                            guards.push(new Guard(50,120,4,-3));
+                            guards.push(new Guard(150,120,4,3));
+                            guards.push(new Guard(245,120,5,-3));
+                            guards.push(new Guard(55,200,5,3));
+                            guards.push(new Guard(160,200,3,-3));
+                            guards.push(new Guard(230,200,6,3));
+                            stage.addChild(guards[0]);
+                            stage.addChild(guards[1]);
+                            stage.addChild(guards[2]);
+                            stage.addChild(guards[3]);
+                            stage.addChild(guards[4]);
+                            stage.addChild(guards[5]);
+                            stage.addChild(guards[6]);
+                            stage.addChild(guards[7]);
+                            stage.addChild(guards[8]);
+
+                            stage.addChild(enemy1);
+                            stage.addChild(player1);
+                            stage.addChild(player2);
+                            stage.addChild(aim1);
+                        }
+                        guardAmount++;
+                    });
                 }
             },
             checkEnemy: function(){
@@ -336,36 +518,24 @@ window.onload = function(){
             }
         });
 
-        var stage = new Group();
-        stage.addChild(map);
         var enemy1 = new Enemy(160,160,0);
         var player1 = new Player1();
         var player2 = new Player2(player1.x-32,player1.y-32,0);
         var aim1 = new Aim(player2.x,player2.y);
-       
+
         for(var i=0;i<chestsAmount;i++){
             chests.push(new Chest(rand(304),rand(304)));
             stage.addChild(chests[i]);
         }
 
         guards.push(new Guard(60,40,5,2));
-        //guards.push(new Guard(140,40,5,2));
         guards.push(new Guard(240,40,6,-2));
-        //guards.push(new Guard(50,120,4,-2));
         guards.push(new Guard(150,120,4,2));
-        //guards.push(new Guard(245,120,5,-2));
-        guards.push(new Guard(55,200,5,2));
-        //guards.push(new Guard(160,200,3,-2));
         guards.push(new Guard(230,200,6,2));
         stage.addChild(guards[0]);
         stage.addChild(guards[1]);
         stage.addChild(guards[2]);
         stage.addChild(guards[3]);
-        stage.addChild(guards[4]);
-        //stage.addChild(guards[5]);
-        //stage.addChild(guards[6]);
-        //stage.addChild(guards[7]);
-        //stage.addChild(guards[8]);
 
         stage.addChild(enemy1);
         stage.addChild(player1);
@@ -382,7 +552,8 @@ function makeSelect(text,y){
     var label = new Label(text);
     label.font = "16px monoscape";
     label.color = "red";
-    label.y = y;
+    label.x = 20;
+    label.y = y+75;
     label.width = 320;
     return label;
 }
@@ -391,6 +562,4 @@ function rand(num){
     return Math.floor(Math.random() * num);
 }
         
-function level(){
 
-}
