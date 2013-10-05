@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>HelloWorld</title>
+        <script type="text/javascript" src="enchant.js"></script>
+    </head>
+    <body>
+        <script>
+            enchant();
+            window.onload = function(){
+                var game = new Core(320,320);
+                game.start();
+                game.addLabel = function(text,color,x,y){
+                    var label = new Label(text);
+                    label.font = "16px monospace";
+                    label.color = color;
+                    label.x = x;
+                    label.y = y;
+                    game.rootScene.addChild(label);
+                }
+                game.rootScene.addEventListener(Event.ENTER_FRAME,function(){
+                    if(game.frame%3===0){
+                    var score = rand(100);
+                    var r = rand(256);
+                    var g = rand(256);
+                    var b = rand(256);
+                    var x = rand(300);
+                    var y = rand(300);
+                  //  game.addLabel(score+" Points","rgb("+r+","+g+","+b+")",x,y);
+                }
+                });
+
+                label.addEventListener(Event.ENTER_FRAME,function(){
+                    if(label.age>10) game.rootScene.removeChild(label);
+                });
+            };
+
+            function rand(num){
+                return Math.floor(Math.random() * num);
+            }
+
+
+
+        </script>
+    </body>
+</html>
